@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="point_of_sale.ProductCard" t-inherit="point_of_sale.ProductCard" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('product-information-tag')]" position="after">
+            <t t-if="(this.env.services.pos.db.product_by_id[props.productId].quantity lte this.env.services.pos.db.product_by_id[props.productId].min_low_stock_alert) and (this.env.services.pos.db.product_by_id[props.productId].quantity gt 0)">
+                <div id="qty_display_low_stock" t-attf-class="display_qty low_stock">
+                    <t t-esc="this.env.services.pos.db.product_by_id[props.productId].quantity"/>
+                </div>
+            </t>
+            <t t-elif="(this.env.services.pos.db.product_by_id[props.productId].quantity gt this.env.services.pos.db.product_by_id[props.productId].min_low_stock_alert) and (this.env.services.pos.db.product_by_id[props.productId].quantity lte (this.env.services.pos.db.product_by_id[props.productId].min_low_stock_alert * 2))">
+                <div id="qty_display_medium_stock" t-attf-class="display_qty medium_stock">
+                    <t t-esc="this.env.services.pos.db.product_by_id[props.productId].quantity"/>
+                </div>
+            </t>
+            <t t-else="">
+                <div id="qty_display_stock" t-attf-class="display_qty #{this.env.services.pos.db.product_by_id[props.productId].quantity lte 0 ? 'not-available':''}">
+                    <t t-esc="this.env.services.pos.db.product_by_id[props.productId].quantity"/>
+                </div>
+            </t>
+        </xpath>
+    </t>
+</templates>

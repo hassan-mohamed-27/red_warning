@@ -1,0 +1,56 @@
+<odoo>
+  <data>
+        <!-- Product Template Tree View Inheritance -->
+        <record id="view_product_tree_red_warning" model="ir.ui.view">
+            <field name="name">product.template.tree.red.warning</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <!-- Add warning decoration to qty_available -->
+                <xpath expr="//field[@name='qty_available']" position="attributes">
+                    <attribute name="decoration-danger">low_stock_warning</attribute>
+                </xpath>
+                <!-- Add hidden low_stock_warning field -->
+                <xpath expr="//field[@name='qty_available']" position="after">
+                    <field name="low_stock_warning" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- Product Template Form View Inheritance -->
+ 
+        <!-- Product Template Khappan Tree View Inheritance -->
+<record id="view_product_kanban_warning_widget_khappan" model="ir.ui.view">
+    <field name="name">product.template.kanban.warning.widget.khappan</field>
+    <field name="model">product.template</field>
+    <field name="inherit_id" ref="product.product_template_kanban_view"/>
+    <field name="arch" type="xml">
+        <!-- Ensure low_stock_warning is available in each record -->
+        <xpath expr="//kanban" position="inside">
+            <field name="low_stock_warning"/>
+        </xpath>
+        <!-- Remove any existing inline style for the card if needed -->
+        <xpath expr="//div[contains(@class, 'oe_kanban_card')]" position="attributes">
+            <attribute name="style" remove="1"/>
+        </xpath>
+        <!-- Insert a warning widget into the kanban template only if low_stock_warning is true -->
+        <xpath expr="//templates/t[@t-name='kanban-box']" position="inside">
+            <t t-if="record.low_stock_warning.raw_value">
+                <div class="warning-widget" 
+                     style="position: absolute; left: 0; top: 0; bottom: 0; width: 30px; background-color: #f8d7da; display: flex; align-items: center; justify-content: center;">
+                    <span style="color: #721c24; font-size: 20px;">⚠</span>
+                </div>
+            </t>
+        </xpath>
+        <!-- Add left padding to prevent content overlap with the widget -->
+        <xpath expr="//div[contains(@class, 'oe_kanban_card')]" position="attributes">
+            <attribute name="style">padding-left: 35px;</attribute>
+        </xpath>
+    </field>
+</record>
+
+
+
+
+  </data>
+</odoo>
