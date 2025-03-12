@@ -16,6 +16,13 @@ class ProductTemplate(models.Model):
         help="Minimum quantity threshold for displaying low stock warning"
     )
 
+    pos_product_qty_limit = fields.Float(
+        string="POS Quantity Limit",
+        default=2,
+        help="Maximum quantity that can be ordered in POS. 0 means no limit.",
+        store=True
+    )
+
     @api.depends('qty_available')
     def _compute_low_stock_warning(self):
         for product in self:
@@ -27,6 +34,7 @@ class ProductProduct(models.Model):
     
     # Add this field to make it available at product variant level
     min_low_stock_alert = fields.Float(related='product_tmpl_id.min_low_stock_alert', store=True)
+    pos_product_qty_limit = fields.Float(related='product_tmpl_id.pos_product_qty_limit', store=True)
     
     # Add a computed field with hardcoded threshold
     is_low_stock = fields.Boolean(
@@ -52,7 +60,7 @@ class ProductProduct(models.Model):
             product_id: Product id (redundant parameter)
             
         Returns:
-            Dictionary with quantity and threshold
+            Dictionary with quantity, threshold and quantity limit
         """
         product = self.browse(product_ids[0])
         
@@ -64,10 +72,11 @@ class ProductProduct(models.Model):
         
         quantity = sum(quant.quantity for quant in quants)
         
-        # Return both quantity and threshold in one response
+        # Return quantity, threshold and quantity limit in one response
         return {
             'quantity': quantity, 
-            'threshold': product.min_low_stock_alert or 10.0
+            'threshold': product.min_low_stock_alert or 10.0,
+            'pos_qty_limit': product.pos_product_qty_limit or 2
         }
 
 
@@ -77,7 +86,7 @@ class PosConfig(models.Model):
     @api.model
     def _default_product_fields(self):
         fields = super()._default_product_fields()
-        fields.append('min_low_stock_alert')
+        fields.extend(['min_low_stock_alert', 'pos_product_qty_limit'])
         return fields
 
 

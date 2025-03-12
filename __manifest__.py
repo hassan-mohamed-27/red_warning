@@ -13,7 +13,9 @@
     'assets': {
         'point_of_sale._assets_pos': [
             'red_warning/static/src/js/pos_red_warning_extension.js',
+            'red_warning/static/src/css/stock_border.css',
             'red_warning/static/src/css/pos_red_warning.css',
+           
             'red_warning/static/src/xml/patch.xml',
             
         ],

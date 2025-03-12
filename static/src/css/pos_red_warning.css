@@ -12,13 +12,13 @@
     color:white
 }
 .display_qty.not-available,.display_virtual.not-available{
-  background: #0b0404;
+  background: #ef0101;
 }
 .display_qty.low_stock{
-  background: #e50000;
+  background: #e5b000;
 }
 .display_qty.medium_stock{
-  background: #999900;
+  background: #dede40;
 }
 .display_virtual{
     background:#017e84;

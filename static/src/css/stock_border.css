@@ -1,0 +1,13 @@
+.product:has(#qty_display_low_stock) {
+    border: 2px solid orange !important;
+}
+
+/* When product has medium stock indicator */
+.product:has(#qty_display_medium_stock) {
+    border: 2px solid yellow !important;
+}
+
+/* When product is not available */
+.product:has(#qty_display_stock.not-available) {
+    border: 2px solid red !important;
+}
